@@ -40,18 +40,19 @@ sort map@((k,v):m) sortedMap = sort newMap (smallest:sortedMap)
 -- keeping track of the current smallest element found
 findSmallestElement :: (Map Char Int) -> (Char, Int) -> (Char, Int)
 findSmallestElement [] crtLowest = crtLowest
-findSmallestElement ((k,v):m) crtLowest@(k2,v2) | v < v2 = findSmallest m (k,v)
-                                         | otherwise = findSmallest m crtLowest
+findSmallestElement ((k,v):m) crtLowest@(k2,v2)
+                                    | v < v2 = findSmallest m (k,v)
+                                    | otherwise = findSmallest m crtLowest
 
 -- Remove the element in the map by filtering it out and then returning the
 -- result
 removeElement :: (Map Char Int) -> (Char, Int) -> (Map Char Int)
-removeElement m (k,v) = filter (\(a,b) -> a /= k) m
+removeElement map (k,v) = filter (\(a,b) -> a /= k) map
 
 -- Check if the map is descending order: first map it to a list of ints for
 -- easier element access
 isInDescOrder :: (Map Char Int) -> Bool
-isInDescOrder m = checkOrder $ map(\(a,b) -> b) m
+isInDescOrder oMap = checkOrder $ map(\(a,b) -> b) oMap
 
 -- Then recursively compare the head with the next-most element throughout the
 -- whole list

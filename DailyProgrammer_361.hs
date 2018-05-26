@@ -33,16 +33,15 @@ decrementCount c ((k,v):m) seen | c == k    = ((k,(v-1)):m) ++ seen
 sort :: (Map Char Int) -> (Map Char Int) -> (Map Char Int)
 sort [] sortedMap = sortedMap
 sort map@((k,v):m) sortedMap = sort newMap (smallest:sortedMap)
-                              where smallest = findSmallestElement map (k,v)
-                                    newMap   = removeElement map smallestElement
+                              where smallest = findSmallest map (k,v)
+                                    newMap   = removeElement map smallest
 
 -- Find the smallest element in the map by traversing through the map while
 -- keeping track of the current smallest element found
-findSmallestElement :: (Map Char Int) -> (Char, Int) -> (Char, Int)
-findSmallestElement [] crtLowest = crtLowest
-findSmallestElement ((k,v):m) crtLowest@(k2,v2)
-                                    | v < v2 = findSmallest m (k,v)
-                                    | otherwise = findSmallest m crtLowest
+findSmallest :: (Map Char Int) -> (Char, Int) -> (Char, Int)
+findSmallest [] crtLowest = crtLowest
+findSmallest ((k,v):m) crtLowest@(k2,v2) | v < v2    = findSmallest m (k,v)
+                                         | otherwise = findSmallest m crtLowest
 
 -- Remove the element in the map by filtering it out and then returning the
 -- result
@@ -58,6 +57,6 @@ isInDescOrder oMap = checkOrder $ map(\(a,b) -> b) oMap
 -- whole list
 checkOrder :: [Int] -> Bool
 checkOrder [] = True
-checkOrder (x:y:xs) | length xs == 0 = True
-                    | x == y         = checkOrder xs
-                    | otherwise      = False
+checkOrder (x:xs) | length xs == 0 = True
+                  | x == head xs   = checkOrder xs
+                  | otherwise      = False
